@@ -9,7 +9,7 @@ pipeline {
             
         stage('push image to gcr'){
             steps {
-                sh 'gcloud auth configure-docker'
+                sh 'gcloud auth configure-docker --auto-approve'
                 sh 'docker tag gcr:new grc.io/es-devops-sb/gcr:new'
                 sh 'docker push gcr.io/es-devops-sb/gcr:new'
             }
