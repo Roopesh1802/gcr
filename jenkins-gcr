@@ -1,8 +1,5 @@
 pipeline { 
     agent any
-    environment {
-        Docker_Credentials = credentials('docker-hub')
-    }
      stages {
         stage('Build Docker Image') {
             steps { 
@@ -12,8 +9,35 @@ pipeline {
             
         stage('push image to gcr'){
             steps {
+                sh 'gcloud auth configure-docker'
                 sh 'docker tag gcr:new grc.io/es-devops-sb/gcr:new'
-                sh 'docker push grc.io/es-devops-sb/webpage:new'
+                sh 'docker push gcr.io/es-devops-sb/gcr:new'
+            }
+        }
+    }
+         post { 
+            success { 
+                echo "Build is successfull" 
+            } 
+            failure { 
+                echo "Build failed" 
+            }
+        }
+    }
+pipeline { 
+    agent any
+     stages {
+        stage('Build Docker Image') {
+            steps { 
+                sh 'docker build -t gcr:1.0 .'
+                }
+            }
+            
+        stage('push image to gcr'){
+            steps {
+                sh 'gcloud auth configure-docker'
+                sh 'docker tag gcr:new grc.io/es-devops-sb/gcr:new'
+                sh 'docker push gcr.io/es-devops-sb/gcr:new'
             }
         }
     }
