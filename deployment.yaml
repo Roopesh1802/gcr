@@ -1,23 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: myapp
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: nginx
+      app: myapp
   template:
     metadata:
       labels:
-        app: nginx
+        app: myapp
     spec:
       containers:
-      - name: nginx
-        image: webpage:new
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+      - name: myapp
+        image: roopesh81022/webpage:static
         ports:
-        - containerPort: 80
+        - containerPort: 8080
