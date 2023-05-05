@@ -1,5 +1,10 @@
 pipeline { 
     agent any
+    environment{
+        CLUSTER_NAME='my-first-gke-cluster'
+        ZONE='us-central1-c'
+        PROJECT_ID='es-devops-sb'
+    }
      stages {
         stage('Build Docker Image') {
             steps { 
@@ -11,6 +16,19 @@ pipeline {
             steps {
                 sh 'docker tag gcr:1.0 grc.io/es-devops-sb/gcr:1.0'
                 sh 'docker push gcr.io/es-devops-sb/gcr:1.0'
+            }
+        }
+        
+        stage('create a deployment'){
+            steps{
+                sh'gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE} --project ${PROJECT_ID}'
+                sh 'kubectl apply -f deployment.yaml'
+            }
+        }
+
+        stage('create a service'){
+            steps{
+                sh 'kubectl apply -f services.yaml'
             }
         }
     }
