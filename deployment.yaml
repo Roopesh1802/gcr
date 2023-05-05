@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp
+  name: myapp-deployment
 spec:
   replicas: 2
   selector:
@@ -16,4 +16,4 @@ spec:
       - name: myapp
         image: roopesh81022/webpage:static
         ports:
-        - containerPort: 8080
+        - containerPort: 80
